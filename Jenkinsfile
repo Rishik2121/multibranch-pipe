@@ -8,8 +8,8 @@ pipeline{
 
     environment{
          IMAGE_NAME = "rishik21/multibranch-falsk-app"
-         GIT_USER = rishik2121
-         GIT_EMAIL = rishksany@gmail.com
+         GIT_USER = "rishik2121"
+         GIT_EMAIL = "rishksany@gmail.com"
     }
 
     stages{
@@ -26,16 +26,16 @@ pipeline{
 
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_USER'
-                    passwordVariabLe: 'DOCKER_PASS'
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
                 )]){
                     sh """
-                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG}
+                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push ${IMAGE_NAME}:${IMAGE_TAG}
                     """
                 }
-                env.IMAGE-TAG = IMAGE_TAG 
+                env.IMAGE_TAG = IMAGE_TAG 
             }
         }
         stage('Update K8s Manifest') {
