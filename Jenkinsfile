@@ -2,27 +2,28 @@ pipeline{
     agent any 
 
     options{
-         disableConcurrentBuilds()
-
+        disableConcurrentBuilds()
     }
 
     environment{
-         IMAGE_NAME = "rishik21/multibranch-falsk-app"
-         GIT_USER = "rishik2121"
-         GIT_EMAIL = "rishksany@gmail.com"
+        IMAGE_NAME = "rishik21/multibranch-falsk-app"
+        GIT_USER = "rishik2121"
+        GIT_EMAIL = "rishksany@gmail.com"
     }
 
     stages{
         stage('Checkout') {
-             steps{
+            steps{
                 checkout scm
-             }
+            }
         }
 
         stage('Build and Push Image') {
-            when{branch "main"}
+            when { branch "main" }
             steps{
-                def IMAGE_TAG = "build-${BUILD_NUMBER}" 
+                script {
+                    env.IMAGE_TAG = "build-${BUILD_NUMBER}"
+                }
 
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
@@ -35,9 +36,9 @@ pipeline{
                     docker push ${IMAGE_NAME}:${IMAGE_TAG}
                     """
                 }
-                env.IMAGE_TAG = IMAGE_TAG 
             }
         }
+
         stage('Update K8s Manifest') {
             when { branch 'main' }
             steps {
