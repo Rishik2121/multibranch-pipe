@@ -2,7 +2,7 @@ pipeline{
     agent any 
 
     options{
-         disableConcurrentBuilds
+         disableConcurrentBuilds()
 
     }
 
@@ -24,7 +24,7 @@ pipeline{
             steps{
                 def IMAGE_TAG = "build-${BUILD_NUMBER}" 
 
-                withCredential([usernamePassword(
+                withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
                     usernameVariable: 'DOCKER_USER'
                     passwordVariabLe: 'DOCKER_PASS'
