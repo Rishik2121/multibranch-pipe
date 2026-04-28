@@ -1,20 +1,21 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
-metadata: 
+metadata:
   name: movie-app
-spec: 
-   replicas: 5
-   selector: 
-      matchLabels: 
-         app: movie-app
-   template: 
-      metadata: 
-         lables: 
-            app: movie-app
-      spec: 
-        containers: 
-          - name: movie-app
-            image: rishik21/multibranch-falsk-app:build-4
-            ports: 
-              - containerPort: 5000
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: movie-app
+  template:
+    metadata:
+      labels:
+        app: movie-app
+    spec:
+      containers:
+        - name: movie-app
+          image: rishik21/multibranch-falsk-app:latest
+          ports:
+            - containerPort: 5000
       
